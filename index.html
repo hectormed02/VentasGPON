@@ -4,82 +4,248 @@
   <base target="_top">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="p-4">
-  <div class="container">
-    <h2>Registrar Datos en Google Sheets</h2>
+<body class="p-4 bg-light">
+  <div class="container bg-white p-4 rounded shadow-sm">
+    <h2 class="mb-4">Gestor de Registros</h2>
+    
+    <div class="card p-3 mb-4 border-primary">
+      <label class="form-label fw-bold text-primary">Buscar Registro Existente</label>
+      <div class="input-group">
+        <input type="number" id="buscarOPP" class="form-control" placeholder="Ingrese OPP / ID (Columna N)">
+        <button class="btn btn-primary" type="button" id="btnBuscar" onclick="buscarRegistro()">Buscar</button>
+        <button class="btn btn-outline-secondary" type="button" onclick="limpiarFormulario()">Nuevo Registro</button>
+      </div>
+      <small id="mensajeBusqueda" class="form-text mt-2"></small>
+    </div>
+
     <form id="formularioSheets" onsubmit="enviarDatos(event)">
-      
+      <input type="hidden" id="filaRegistro" value="">
+
       <div class="row">
-        <div class="col-md-6 mb-3">
-          <label>Columna B:</label>
-          <input type="text" class="form-control" id="colB" required>
+        <div class="col-md-3 mb-3">
+          <label>OPP / ID (N):</label>
+          <input type="number" class="form-control" id="colN" required>
         </div>
-        <div class="col-md-6 mb-3">
-          <label>Columna C:</label>
-          <input type="text" class="form-control" id="colC">
+        <div class="col-md-3 mb-3">
+          <label>Gestor (B):</label>
+          <select class="form-select" id="colB" required>
+            <option value="">Seleccione...</option>
+            <option value="KATIA">KATIA</option>
+            <option value="DANIEL">DANIEL</option>
+            <option value="HECTOR">HECTOR</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>RUC (F):</label>
+          <input type="number" class="form-control" id="colF">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Razón Social (G):</label>
+          <input type="text" class="form-control" id="colG">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label>Ancho Banda (H):</label>
+          <input type="text" class="form-control" id="colH" placeholder="Ej. 100 Mbps">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Fecha Ingreso (L):</label>
+          <input type="date" class="form-control" id="colL">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>PSI / ID Solicitud (M):</label>
+          <input type="number" class="form-control" id="colM">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>SAF / ID Carrito (O):</label>
+          <input type="number" class="form-control" id="colO">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label>SIRO / ID SERVICIO (P):</label>
+          <input type="number" class="form-control" id="colP">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>OT (Q):</label>
+          <input type="number" class="form-control" id="colQ">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Estado (R):</label>
+          <input type="text" class="form-control" id="colR" placeholder="Ej. Activo">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Promoción (S):</label>
+          <input type="text" class="form-control" id="colS">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label>Fecha Admisión (T):</label>
+          <input type="date" class="form-control" id="colT">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Fecha Inicio Serv. (X):</label>
+          <input type="date" class="form-control" id="colX">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Meses Activos (Y):</label>
+          <input type="number" class="form-control" id="colY">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Dirección (W):</label>
+          <input type="text" class="form-control" id="colW">
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-4 mb-3">
-          <label>Columna F:</label>
-          <input type="text" class="form-control" id="colF">
+          <label>Asunto (Z):</label>
+          <input type="text" class="form-control" id="colZ">
         </div>
         <div class="col-md-4 mb-3">
-          <label>Columna G:</label>
-          <input type="text" class="form-control" id="colG">
+          <label>Correo (AA):</label>
+          <input type="email" class="form-control" id="colAA">
         </div>
         <div class="col-md-4 mb-3">
-          <label>Columna H:</label>
-          <input type="text" class="form-control" id="colH">
+          <label>Observaciones (V):</label>
+          <input type="text" class="form-control" id="colV">
         </div>
       </div>
 
       <div class="row">
          <div class="col-md-12 mb-3">
-          <label>Columna AB:</label>
-          <input type="text" class="form-control" id="colAB">
+          <label>Mensaje (AB):</label>
+          <textarea class="form-control" id="colAB" rows="2"></textarea>
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar Registro</button>
-      <div id="mensaje" class="mt-3 fw-bold"></div>
+      <button type="submit" class="btn btn-success w-100 fs-5" id="btnGuardar">Guardar Registro</button>
+      <div id="mensaje" class="mt-3 text-center fs-5"></div>
     </form>
   </div>
 
   <script>
-    function enviarDatos(event) {
-      event.preventDefault(); // Evita que la página se recargue
+    // Convertir formato de fecha de Google Sheets a YYYY-MM-DD para el input type="date"
+    function formatearFecha(fechaString) {
+      if (!fechaString) return "";
+      let fecha = new Date(fechaString);
+      if (isNaN(fecha.getTime())) return fechaString; 
+      return fecha.toISOString().split('T')[0];
+    }
+
+    // Buscar el registro en la base de datos
+    function buscarRegistro() {
+      const oppId = document.getElementById('buscarOPP').value;
+      const msgBusqueda = document.getElementById('mensajeBusqueda');
       
-      // Mostrar mensaje de carga
-      document.getElementById('mensaje').innerText = "Guardando...";
+      if(!oppId) {
+        msgBusqueda.innerHTML = "<span class='text-danger'>Por favor ingrese un OPP / ID para buscar.</span>";
+        return;
+      }
+
+      msgBusqueda.innerHTML = "<span class='text-primary'>Buscando...</span>";
+      document.getElementById('btnBuscar').disabled = true;
+
+      google.script.run
+        .withSuccessHandler(function(resultado) {
+           document.getElementById('btnBuscar').disabled = false;
+           if (resultado) {
+             msgBusqueda.innerHTML = "<span class='text-success fw-bold'>¡Registro encontrado! Puedes editarlo y guardar.</span>";
+             
+             // Llenar el formulario con los datos (Recordar índice = Columna - 1)
+             document.getElementById('filaRegistro').value = resultado.fila;
+             
+             document.getElementById('colB').value = resultado.datos[1];
+             document.getElementById('colF').value = resultado.datos[5];
+             document.getElementById('colG').value = resultado.datos[6];
+             document.getElementById('colH').value = resultado.datos[7];
+             document.getElementById('colL').value = formatearFecha(resultado.datos[11]);
+             document.getElementById('colM').value = resultado.datos[12];
+             document.getElementById('colN').value = resultado.datos[13];
+             document.getElementById('colO').value = resultado.datos[14];
+             document.getElementById('colP').value = resultado.datos[15];
+             document.getElementById('colQ').value = resultado.datos[16];
+             document.getElementById('colR').value = resultado.datos[17];
+             document.getElementById('colS').value = resultado.datos[18];
+             document.getElementById('colT').value = formatearFecha(resultado.datos[19]);
+             document.getElementById('colV').value = resultado.datos[21];
+             document.getElementById('colW').value = resultado.datos[22];
+             document.getElementById('colX').value = formatearFecha(resultado.datos[23]);
+             document.getElementById('colY').value = resultado.datos[24];
+             document.getElementById('colZ').value = resultado.datos[25];
+             document.getElementById('colAA').value = resultado.datos[26];
+             document.getElementById('colAB').value = resultado.datos[27];
+             
+             document.getElementById('btnGuardar').innerText = "Actualizar Registro";
+             document.getElementById('btnGuardar').className = "btn btn-warning w-100 fs-5";
+           } else {
+             msgBusqueda.innerHTML = "<span class='text-danger fw-bold'>No se encontró ningún registro con ese OPP / ID.</span>";
+             limpiarFormulario(false); // Limpia pero mantiene el mensaje
+           }
+        })
+        .buscarPorOPP(oppId);
+    }
+
+    // Limpiar para preparar un ingreso nuevo
+    function limpiarFormulario(limpiarMensajeBusqueda = true) {
+      document.getElementById('formularioSheets').reset();
+      document.getElementById('filaRegistro').value = "";
+      document.getElementById('btnGuardar').innerText = "Guardar Registro";
+      document.getElementById('btnGuardar').className = "btn btn-success w-100 fs-5";
+      document.getElementById('mensaje').innerText = "";
+      if(limpiarMensajeBusqueda) {
+        document.getElementById('mensajeBusqueda').innerHTML = "";
+        document.getElementById('buscarOPP').value = "";
+      }
+    }
+
+    // Guardar (Crear o Actualizar)
+    function enviarDatos(event) {
+      event.preventDefault(); 
+      
+      document.getElementById('mensaje').innerHTML = "<span class='text-primary'>Guardando datos en Sheets...</span>";
       document.getElementById('btnGuardar').disabled = true;
 
-      // Recolectar datos del formulario
       const datos = {
+        filaRegistro: document.getElementById('filaRegistro').value,
         colB: document.getElementById('colB').value,
-        colC: document.getElementById('colC').value,
         colF: document.getElementById('colF').value,
         colG: document.getElementById('colG').value,
         colH: document.getElementById('colH').value,
-        // ... añadir las demás columnas aquí
+        colL: document.getElementById('colL').value,
+        colM: document.getElementById('colM').value,
+        colN: document.getElementById('colN').value,
+        colO: document.getElementById('colO').value,
+        colP: document.getElementById('colP').value,
+        colQ: document.getElementById('colQ').value,
+        colR: document.getElementById('colR').value,
+        colS: document.getElementById('colS').value,
+        colT: document.getElementById('colT').value,
+        colV: document.getElementById('colV').value,
+        colW: document.getElementById('colW').value,
+        colX: document.getElementById('colX').value,
+        colY: document.getElementById('colY').value,
+        colZ: document.getElementById('colZ').value,
+        colAA: document.getElementById('colAA').value,
         colAB: document.getElementById('colAB').value
       };
 
-      // Llamar a la función del servidor (Código.gs)
       google.script.run
         .withSuccessHandler(function(respuesta) {
-           document.getElementById('mensaje').innerText = respuesta;
-           document.getElementById('mensaje').className = "mt-3 fw-bold text-success";
-           document.getElementById('formularioSheets').reset(); // Limpiar formulario
+           document.getElementById('mensaje').innerHTML = "<span class='text-success fw-bold'>" + respuesta + "</span>";
+           limpiarFormulario();
            document.getElementById('btnGuardar').disabled = false;
         })
         .withFailureHandler(function(error) {
-           document.getElementById('mensaje').innerText = "Error: " + error.message;
-           document.getElementById('mensaje').className = "mt-3 fw-bold text-danger";
+           document.getElementById('mensaje').innerHTML = "<span class='text-danger fw-bold'>Error: " + error.message + "</span>";
            document.getElementById('btnGuardar').disabled = false;
         })
-        .crearRegistro(datos);
+        .guardarRegistro(datos);
     }
   </script>
 </body>
